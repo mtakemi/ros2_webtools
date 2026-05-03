@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROS2 Web Tools</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f2f5;
+      color: #222;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: 1.8rem;
+      color: #1a73e8;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      padding: 28px 32px;
+      max-width: 640px;
+      margin: 0 auto 32px auto;
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #1a73e8;
+      border-left: 4px solid #1a73e8;
+      padding-left: 10px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    label {
+      min-width: 100px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    input[type="number"], input[type="text"] {
+      flex: 1;
+      min-width: 120px;
+      padding: 8px 12px;
+      border: 1px solid #ccd0d5;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #1a73e8;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      flex: 1;
+      min-width: 140px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:active { transform: scale(0.97); }
+
+    .btn-primary   { background: #1a73e8; color: #fff; }
+    .btn-primary:hover { background: #1558b0; }
+    .btn-secondary { background: #e8f0fe; color: #1a73e8; }
+    .btn-secondary:hover { background: #c5d8fc; }
+
+    .result-box {
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      display: none;
+    }
+
+    .result-box.visible { display: block; }
+
+    .result-box strong { color: #1a73e8; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #e8eaed;
+      margin: 20px 0;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 20px 16px; }
+      label { min-width: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>ROS2 Web Tools</h1>
+
+<!-- ===== Radians / Degrees ===== -->
+<div class="card">
+  <h2>Radians ↔ Degrees 変換</h2>
+
+  <div class="row">
+    <label for="rad">Radians</label>
+    <input type="number" id="rad" placeholder="例: 3.14159" step="any" />
+  </div>
+
+  <div class="row">
+    <label for="deg">Degrees</label>
+    <input type="number" id="deg" placeholder="例: 180" step="any" />
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary"   onclick="radToDeg()">Rad → Deg</button>
+    <button class="btn-secondary" onclick="degToRad()">Deg → Rad</button>
+  </div>
+
+  <div class="result-box" id="rad-deg-result"></div>
+</div>
+
+<!-- ===== RPY / Quaternion ===== -->
+<div class="card">
+  <h2>RPY ↔ Quaternion 変換</h2>
+
+  <!-- RPY inputs -->
+  <p style="font-weight:600; margin-bottom:10px;">RPY (Radians)</p>
+  <div class="row">
+    <label for="roll">Roll (X)</label>
+    <input type="number" id="roll" placeholder="例: 0.0" step="any" />
+  </div>
+  <div class="row">
+    <label for="pitch">Pitch (Y)</label>
+    <input type="number" id="pitch" placeholder="例: 0.0" step="any" />
+  </div>
+  <div class="row">
+    <label for="yaw">Yaw (Z)</label>
+    <input type="number" id="yaw" placeholder="例: 1.5708" step="any" />
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Quaternion inputs -->
+  <p style="font-weight:600; margin-bottom:10px;">Quaternion (x, y, z, w)</p>
+  <div class="row">
+    <label for="qx">x</label>
+    <input type="number" id="qx" placeholder="例: 0.0" step="any" />
+  </div>
+  <div class="row">
+    <label for="qy">y</label>
+    <input type="number" id="qy" placeholder="例: 0.0" step="any" />
+  </div>
+  <div class="row">
+    <label for="qz">z</label>
+    <input type="number" id="qz" placeholder="例: 0.7071" step="any" />
+  </div>
+  <div class="row">
+    <label for="qw">w</label>
+    <input type="number" id="qw" placeholder="例: 0.7071" step="any" />
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary"   onclick="rpyToQuat()">RPY → Quaternion</button>
+    <button class="btn-secondary" onclick="quatToRpy()">Quaternion → RPY</button>
+  </div>
+
+  <div class="result-box" id="rpy-quat-result"></div>
+</div>
+
+<script>
+  /* ---- helpers ---- */
+  const MIN_QUATERNION_NORM = 1e-10;
+
+  /** Round v to `digits` significant decimal places for display. */
+  function fmt(v, digits = 8) {
+    return Number(v.toFixed(digits));
+  }
+
+  function showResult(id, html) {
+    const el = document.getElementById(id);
+    el.innerHTML = html;
+    el.classList.add('visible');
+  }
+
+  /* ---- Rad / Deg ---- */
+  function radToDeg() {
+    const rad = parseFloat(document.getElementById('rad').value);
+    if (isNaN(rad)) { alert('Radians の値を入力してください'); return; }
+    const deg = rad * (180 / Math.PI);
+    document.getElementById('deg').value = fmt(deg);
+    showResult('rad-deg-result',
+      `<strong>${fmt(rad)} rad</strong> = <strong>${fmt(deg)} °</strong>`);
+  }
+
+  function degToRad() {
+    const deg = parseFloat(document.getElementById('deg').value);
+    if (isNaN(deg)) { alert('Degrees の値を入力してください'); return; }
+    const rad = deg * (Math.PI / 180);
+    document.getElementById('rad').value = fmt(rad);
+    showResult('rad-deg-result',
+      `<strong>${fmt(deg)} °</strong> = <strong>${fmt(rad)} rad</strong>`);
+  }
+
+  /* ---- RPY → Quaternion (ZYX / extrinsic XYZ) ---- */
+  function rpyToQuat() {
+    const roll  = parseFloat(document.getElementById('roll').value);
+    const pitch = parseFloat(document.getElementById('pitch').value);
+    const yaw   = parseFloat(document.getElementById('yaw').value);
+    if ([roll, pitch, yaw].some(isNaN)) {
+      alert('Roll, Pitch, Yaw の値をすべて入力してください'); return;
+    }
+
+    const cr = Math.cos(roll  / 2), sr = Math.sin(roll  / 2);
+    const cp = Math.cos(pitch / 2), sp = Math.sin(pitch / 2);
+    const cy = Math.cos(yaw   / 2), sy = Math.sin(yaw   / 2);
+
+    const qx = sr * cp * cy - cr * sp * sy;
+    const qy = cr * sp * cy + sr * cp * sy;
+    const qz = cr * cp * sy - sr * sp * cy;
+    const qw = cr * cp * cy + sr * sp * sy;
+
+    document.getElementById('qx').value = fmt(qx);
+    document.getElementById('qy').value = fmt(qy);
+    document.getElementById('qz').value = fmt(qz);
+    document.getElementById('qw').value = fmt(qw);
+
+    showResult('rpy-quat-result',
+      `RPY (${fmt(roll)}, ${fmt(pitch)}, ${fmt(yaw)}) [rad]<br>` +
+      `→ Quaternion<br>` +
+      `&nbsp;&nbsp;<strong>x</strong> = ${fmt(qx)}<br>` +
+      `&nbsp;&nbsp;<strong>y</strong> = ${fmt(qy)}<br>` +
+      `&nbsp;&nbsp;<strong>z</strong> = ${fmt(qz)}<br>` +
+      `&nbsp;&nbsp;<strong>w</strong> = ${fmt(qw)}`);
+  }
+
+  /* ---- Quaternion → RPY ---- */
+  function quatToRpy() {
+    const qx = parseFloat(document.getElementById('qx').value);
+    const qy = parseFloat(document.getElementById('qy').value);
+    const qz = parseFloat(document.getElementById('qz').value);
+    const qw = parseFloat(document.getElementById('qw').value);
+    if ([qx, qy, qz, qw].some(isNaN)) {
+      alert('x, y, z, w の値をすべて入力してください'); return;
+    }
+
+    // Normalize
+    const norm = Math.sqrt(qx*qx + qy*qy + qz*qz + qw*qw);
+    if (norm < MIN_QUATERNION_NORM) { alert('クォータニオンの大きさが 0 に近すぎます'); return; }
+    const nx = qx/norm, ny = qy/norm, nz = qz/norm, nw = qw/norm;
+
+    // Roll (rotation about X)
+    const sinr_cosp = 2 * (nw * nx + ny * nz);
+    const cosr_cosp = 1 - 2 * (nx * nx + ny * ny);
+    const roll = Math.atan2(sinr_cosp, cosr_cosp);
+
+    // Pitch (rotation about Y)
+    const sinp = 2 * (nw * ny - nz * nx);
+    const pitch = Math.abs(sinp) >= 1
+      ? Math.sign(sinp) * (Math.PI / 2)   // gimbal lock
+      : Math.asin(sinp);
+
+    // Yaw (rotation about Z)
+    const siny_cosp = 2 * (nw * nz + nx * ny);
+    const cosy_cosp = 1 - 2 * (ny * ny + nz * nz);
+    const yaw = Math.atan2(siny_cosp, cosy_cosp);
+
+    document.getElementById('roll').value  = fmt(roll);
+    document.getElementById('pitch').value = fmt(pitch);
+    document.getElementById('yaw').value   = fmt(yaw);
+
+    showResult('rpy-quat-result',
+      `Quaternion (x=${fmt(qx)}, y=${fmt(qy)}, z=${fmt(qz)}, w=${fmt(qw)})<br>` +
+      `→ RPY [rad]<br>` +
+      `&nbsp;&nbsp;<strong>Roll  (X)</strong> = ${fmt(roll)}<br>` +
+      `&nbsp;&nbsp;<strong>Pitch (Y)</strong> = ${fmt(pitch)}<br>` +
+      `&nbsp;&nbsp;<strong>Yaw   (Z)</strong> = ${fmt(yaw)}<br>` +
+      `→ RPY [deg]<br>` +
+      `&nbsp;&nbsp;<strong>Roll  (X)</strong> = ${fmt(roll  * 180/Math.PI)} °<br>` +
+      `&nbsp;&nbsp;<strong>Pitch (Y)</strong> = ${fmt(pitch * 180/Math.PI)} °<br>` +
+      `&nbsp;&nbsp;<strong>Yaw   (Z)</strong> = ${fmt(yaw   * 180/Math.PI)} °`);
+  }
+</script>
+</body>
+</html>
