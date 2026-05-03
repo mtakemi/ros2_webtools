@@ -9,79 +9,110 @@
 
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f0f2f5;
-      color: #222;
+      background:
+        radial-gradient(circle at 10% 10%, #dff1ff 0%, transparent 35%),
+        radial-gradient(circle at 90% 20%, #edf7e6 0%, transparent 30%),
+        #eaf0f5;
+      color: #1e2430;
       min-height: 100vh;
-      padding: 24px 16px;
+      padding: 14px 18px;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 32px;
-      font-size: 1.8rem;
-      color: #1a73e8;
+      margin-bottom: 12px;
+      font-size: 1.55rem;
+      letter-spacing: 0.04em;
+      color: #0f5dbd;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 14px;
+      color: #4e5f75;
+      font-size: 0.93rem;
+    }
+
+    .layout {
+      width: min(1400px, 98vw);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.45fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .card {
-      background: #fff;
+      background: #ffffff;
       border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-      padding: 28px 32px;
-      max-width: 640px;
-      margin: 0 auto 32px auto;
+      border: 1px solid #d2dde8;
+      box-shadow: 0 8px 22px rgba(17, 41, 76, 0.10);
+      padding: 14px 16px;
     }
 
     .card h2 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      color: #1a73e8;
-      border-left: 4px solid #1a73e8;
-      padding-left: 10px;
+      font-size: 1.04rem;
+      margin-bottom: 10px;
+      color: #0f5dbd;
+      border-left: 4px solid #0f5dbd;
+      padding-left: 8px;
+      line-height: 1.35;
+    }
+
+    .muted {
+      color: #5e7089;
+      font-size: 0.84rem;
+      margin-bottom: 10px;
     }
 
     .row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
     label {
-      min-width: 100px;
+      min-width: 86px;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.86rem;
+      color: #2c3950;
     }
 
     input[type="number"], input[type="text"] {
       flex: 1;
-      min-width: 120px;
-      padding: 8px 12px;
-      border: 1px solid #ccd0d5;
-      border-radius: 8px;
-      font-size: 0.95rem;
+      min-width: 118px;
+      padding: 6px 9px;
+      border: 1px solid #c0ccd8;
+      border-radius: 7px;
+      font-size: 0.88rem;
       transition: border-color 0.2s;
+      background: #fcfeff;
     }
 
     input:focus {
       outline: none;
-      border-color: #1a73e8;
+      border-color: #0f5dbd;
     }
 
     .btn-row {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       margin-top: 8px;
-      flex-wrap: wrap;
     }
 
     button {
-      flex: 1;
-      min-width: 140px;
-      padding: 10px 16px;
+      width: 100%;
+      padding: 9px 14px;
       border: none;
       border-radius: 8px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s, transform 0.1s;
@@ -89,69 +120,132 @@
 
     button:active { transform: scale(0.97); }
 
-    .btn-primary   { background: #1a73e8; color: #fff; }
-    .btn-primary:hover { background: #1558b0; }
-    .btn-secondary { background: #e8f0fe; color: #1a73e8; }
-    .btn-secondary:hover { background: #c5d8fc; }
+    .btn-primary { background: #0f5dbd; color: #fff; }
+    .btn-primary:hover { background: #0a478f; }
+
+    .source {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: #5f738b;
+    }
+
+    .section-title {
+      margin: 8px 0 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #2f4057;
+    }
 
     .result-box {
-      margin-top: 16px;
-      padding: 14px 16px;
-      background: #f8f9fa;
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #f4f8fc;
       border-radius: 8px;
-      font-size: 0.95rem;
-      line-height: 1.8;
+      border: 1px solid #d8e3ef;
+      font-size: 0.86rem;
+      line-height: 1.62;
       display: none;
     }
 
     .result-box.visible { display: block; }
 
-    .result-box strong { color: #1a73e8; }
+    .result-box strong { color: #0f5dbd; }
+
+    textarea {
+      width: 100%;
+      resize: vertical;
+      min-height: 64px;
+      padding: 8px 9px;
+      border: 1px solid #c0ccd8;
+      border-radius: 7px;
+      font-size: 0.86rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: #fcfeff;
+      line-height: 1.45;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #0f5dbd;
+    }
+
+    .code-box {
+      margin-top: 10px;
+      min-height: 180px;
+      max-height: 64vh;
+      overflow: auto;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #d8e3ef;
+      background: #0f1724;
+      color: #d9e7ff;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      white-space: pre;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      display: none;
+    }
+
+    .code-box.visible { display: block; }
+
+    .hint {
+      margin-top: 8px;
+      color: #5e7089;
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      word-break: break-all;
+    }
 
     .divider {
       border: none;
-      border-top: 1px solid #e8eaed;
-      margin: 20px 0;
-    }
-
-    @media (max-width: 480px) {
-      .card { padding: 20px 16px; }
-      label { min-width: 80px; }
+      border-top: 1px solid #d8e3ef;
+      margin: 8px 0;
     }
   </style>
 </head>
 <body>
 
 <h1>ROS2 Web Tools</h1>
+<p class="subtitle">単一ボタン双方向変換 / 最後に編集した入力欄を変換元に自動判定 / ペースト後は自動変換</p>
 
-<!-- ===== Radians / Degrees ===== -->
+<div class="layout">
+
+<div class="column">
+
+<!-- ===== UNIX Time ===== -->
 <div class="card">
-  <h2>Radians ↔ Degrees 変換</h2>
+  <h2>UNIX Time → DateTime</h2>
+  <p class="muted">UNIXタイムを入力すると、秒 / ミリ秒 / マイクロ秒 / ナノ秒を自動判定して日時を表示します。</p>
 
   <div class="row">
-    <label for="rad">Radians</label>
-    <input type="number" id="rad" placeholder="例: 3.14159" step="any" />
-  </div>
-
-  <div class="row">
-    <label for="deg">Degrees</label>
-    <input type="number" id="deg" placeholder="例: 180" step="any" />
+    <label for="unix-time">UNIX Time</label>
+    <input type="text" id="unix-time" placeholder="例: 1714723200 / 1714723200000 / 1714723200000000 / 1714723200000000000" />
   </div>
 
   <div class="btn-row">
-    <button class="btn-primary"   onclick="radToDeg()">Rad → Deg</button>
-    <button class="btn-secondary" onclick="degToRad()">Deg → Rad</button>
+    <button class="btn-primary" onclick="convertUnixTime()">日時へ変換</button>
   </div>
 
-  <div class="result-box" id="rad-deg-result"></div>
+  <div class="result-box visible" id="unix-time-result">
+    判定単位: <strong>-</strong><br>
+    Local: <span class="mono">-</span><br>
+    UTC: <span class="mono">-</span><br>
+    Epoch ms: <span class="mono">-</span><br>
+    Epoch s: <span class="mono">-</span>
+  </div>
 </div>
 
 <!-- ===== RPY / Quaternion ===== -->
 <div class="card">
   <h2>RPY ↔ Quaternion 変換</h2>
+  <p class="muted">Roll/Pitch/Yaw か Quaternion の最後に編集した側を自動で変換元にします。</p>
 
   <!-- RPY inputs -->
-  <p style="font-weight:600; margin-bottom:10px;">RPY (Radians)</p>
+  <p class="section-title">RPY (Radians)</p>
   <div class="row">
     <label for="roll">Roll (X)</label>
     <input type="number" id="roll" placeholder="例: 0.0" step="any" />
@@ -168,7 +262,7 @@
   <hr class="divider" />
 
   <!-- Quaternion inputs -->
-  <p style="font-weight:600; margin-bottom:10px;">Quaternion (x, y, z, w)</p>
+  <p class="section-title">Quaternion (x, y, z, w)</p>
   <div class="row">
     <label for="qx">x</label>
     <input type="number" id="qx" placeholder="例: 0.0" step="any" />
@@ -187,20 +281,82 @@
   </div>
 
   <div class="btn-row">
-    <button class="btn-primary"   onclick="rpyToQuat()">RPY → Quaternion</button>
-    <button class="btn-secondary" onclick="quatToRpy()">Quaternion → RPY</button>
+    <button class="btn-primary" onclick="convertPose()">相互変換</button>
   </div>
 
   <div class="result-box" id="rpy-quat-result"></div>
+</div>
+</div>
+
+<div class="column">
+
+<!-- ===== Radians / Degrees ===== -->
+<div class="card">
+  <h2>Radians ↔ Degrees 変換</h2>
+
+  <div class="row">
+    <label for="rad">Radians</label>
+    <input type="number" id="rad" placeholder="例: 3.14159" step="any" />
+  </div>
+
+  <div class="row">
+    <label for="deg">Degrees</label>
+    <input type="number" id="deg" placeholder="例: 180" step="any" />
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="convertRadDeg()">相互変換</button>
+  </div>
+
+  <div class="result-box" id="rad-deg-result"></div>
+</div>
+</div>
+
+<!-- ===== Launch Block Builder ===== -->
+<div class="card launch-builder">
+  <h2>Launch Block Builder</h2>
+  <p class="muted">ros2 run / ros2 launch コマンド、または parameter 名から launch.py ブロックを生成します。</p>
+
+  <p class="section-title">ROS2 Command</p>
+  <textarea
+    id="ros-command"
+    placeholder="例: ros2 run ros2_template_py simple_publisher&#10;例: ros2 launch ros2_template_py simple_pubsub.launch.py&#10;例: ros_command=ros2 run pkg exe"
+  ></textarea>
+
+  <p class="section-title">ROS Parameters (comma separated)</p>
+  <input type="text" id="ros-params" placeholder="例: rate,use_sim_time" />
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="buildLaunchBlocks()">Launch ブロック生成</button>
+  </div>
+
+  <div class="result-box visible" id="launch-builder-result">生成ステータス: 入力待ち</div>
+  <pre class="code-box visible" id="launch-builder-code"># ここに launch.py 用ブロックを表示します
+# 例)
+# Node(
+#     package='your_package',
+#     executable='your_executable',
+#     name='your_executable',
+#     output='screen',
+# )</pre>
+  <p class="hint">コマンドと parameter の両方を入れると、両方のブロックを連結して出力します。</p>
+</div>
+</div>
 </div>
 
 <script>
   /* ---- helpers ---- */
   const MIN_QUATERNION_NORM = 1e-10;
+  let lastRadDegSource = 'rad';
+  let lastPoseSource = 'rpy';
 
   /** Round v to `digits` significant decimal places for display. */
   function fmt(v, digits = 8) {
     return Number(v.toFixed(digits));
+  }
+
+  function parseNum(id) {
+    return parseFloat(document.getElementById(id).value);
   }
 
   function showResult(id, html) {
@@ -209,33 +365,56 @@
     el.classList.add('visible');
   }
 
-  /* ---- Rad / Deg ---- */
-  function radToDeg() {
-    const rad = parseFloat(document.getElementById('rad').value);
-    if (isNaN(rad)) { alert('Radians の値を入力してください'); return; }
+  function hasAllNumbers(ids) {
+    return ids.every((id) => !isNaN(parseNum(id)));
+  }
+
+  function setRadDegSource(source) {
+    lastRadDegSource = source;
+  }
+
+  function setPoseSource(source) {
+    lastPoseSource = source;
+  }
+
+  /* ---- Rad / Deg (single-button bidirectional) ---- */
+  function convertRadFromRad() {
+    const rad = parseNum('rad');
     const deg = rad * (180 / Math.PI);
     document.getElementById('deg').value = fmt(deg);
     showResult('rad-deg-result',
       `<strong>${fmt(rad)} rad</strong> = <strong>${fmt(deg)} °</strong>`);
   }
 
-  function degToRad() {
-    const deg = parseFloat(document.getElementById('deg').value);
-    if (isNaN(deg)) { alert('Degrees の値を入力してください'); return; }
+  function convertRadFromDeg() {
+    const deg = parseNum('deg');
     const rad = deg * (Math.PI / 180);
     document.getElementById('rad').value = fmt(rad);
     showResult('rad-deg-result',
       `<strong>${fmt(deg)} °</strong> = <strong>${fmt(rad)} rad</strong>`);
   }
 
-  /* ---- RPY → Quaternion (ZYX / extrinsic XYZ) ---- */
-  function rpyToQuat() {
-    const roll  = parseFloat(document.getElementById('roll').value);
-    const pitch = parseFloat(document.getElementById('pitch').value);
-    const yaw   = parseFloat(document.getElementById('yaw').value);
-    if ([roll, pitch, yaw].some(isNaN)) {
-      alert('Roll, Pitch, Yaw の値をすべて入力してください'); return;
+  function convertRadDeg(silent = false) {
+    const radValid = !isNaN(parseNum('rad'));
+    const degValid = !isNaN(parseNum('deg'));
+
+    if (lastRadDegSource === 'rad') {
+      if (radValid) { convertRadFromRad(); return true; }
+      if (degValid) { setRadDegSource('deg'); convertRadFromDeg(); return true; }
+    } else {
+      if (degValid) { convertRadFromDeg(); return true; }
+      if (radValid) { setRadDegSource('rad'); convertRadFromRad(); return true; }
     }
+
+    if (!silent) alert('Radians または Degrees の値を入力してください');
+    return false;
+  }
+
+  /* ---- RPY <-> Quaternion (single-button bidirectional) ---- */
+  function convertPoseFromRpy() {
+    const roll = parseNum('roll');
+    const pitch = parseNum('pitch');
+    const yaw = parseNum('yaw');
 
     const cr = Math.cos(roll  / 2), sr = Math.sin(roll  / 2);
     const cp = Math.cos(pitch / 2), sp = Math.sin(pitch / 2);
@@ -260,19 +439,18 @@
       `&nbsp;&nbsp;<strong>w</strong> = ${fmt(qw)}`);
   }
 
-  /* ---- Quaternion → RPY ---- */
-  function quatToRpy() {
-    const qx = parseFloat(document.getElementById('qx').value);
-    const qy = parseFloat(document.getElementById('qy').value);
-    const qz = parseFloat(document.getElementById('qz').value);
-    const qw = parseFloat(document.getElementById('qw').value);
-    if ([qx, qy, qz, qw].some(isNaN)) {
-      alert('x, y, z, w の値をすべて入力してください'); return;
-    }
+  function convertPoseFromQuat(silent = false) {
+    const qx = parseNum('qx');
+    const qy = parseNum('qy');
+    const qz = parseNum('qz');
+    const qw = parseNum('qw');
 
     // Normalize
     const norm = Math.sqrt(qx*qx + qy*qy + qz*qz + qw*qw);
-    if (norm < MIN_QUATERNION_NORM) { alert('クォータニオンの大きさが 0 に近すぎます'); return; }
+    if (norm < MIN_QUATERNION_NORM) {
+      if (!silent) alert('クォータニオンの大きさが 0 に近すぎます');
+      return false;
+    }
     const nx = qx/norm, ny = qy/norm, nz = qz/norm, nw = qw/norm;
 
     // Roll (rotation about X)
@@ -305,7 +483,492 @@
       `&nbsp;&nbsp;<strong>Roll  (X)</strong> = ${fmt(roll  * 180/Math.PI)} °<br>` +
       `&nbsp;&nbsp;<strong>Pitch (Y)</strong> = ${fmt(pitch * 180/Math.PI)} °<br>` +
       `&nbsp;&nbsp;<strong>Yaw   (Z)</strong> = ${fmt(yaw   * 180/Math.PI)} °`);
+
+    return true;
   }
+
+  function convertPose(silent = false) {
+    const rpyValid = hasAllNumbers(['roll', 'pitch', 'yaw']);
+    const quatValid = hasAllNumbers(['qx', 'qy', 'qz', 'qw']);
+
+    if (lastPoseSource === 'rpy') {
+      if (rpyValid) { convertPoseFromRpy(); return true; }
+      if (quatValid) { setPoseSource('quat'); return convertPoseFromQuat(silent); }
+    } else {
+      if (quatValid) { return convertPoseFromQuat(silent); }
+      if (rpyValid) { setPoseSource('rpy'); convertPoseFromRpy(); return true; }
+    }
+
+    if (!silent) alert('RPY か Quaternion のどちらか一式を入力してください');
+    return false;
+  }
+
+  function installAutoConversion() {
+    const radInput = document.getElementById('rad');
+    const degInput = document.getElementById('deg');
+
+    function attachAuto(el, onSource, convertFn) {
+      el.addEventListener('input', () => {
+        onSource();
+        convertFn(true);
+      });
+      el.addEventListener('paste', () => {
+        onSource();
+        setTimeout(() => convertFn(true), 0);
+      });
+    }
+
+    attachAuto(radInput, () => setRadDegSource('rad'), convertRadDeg);
+    attachAuto(degInput, () => setRadDegSource('deg'), convertRadDeg);
+
+    ['roll', 'pitch', 'yaw'].forEach((id) => {
+      const el = document.getElementById(id);
+      attachAuto(el, () => setPoseSource('rpy'), convertPose);
+    });
+
+    ['qx', 'qy', 'qz', 'qw'].forEach((id) => {
+      const el = document.getElementById(id);
+      attachAuto(el, () => setPoseSource('quat'), convertPose);
+    });
+  }
+
+  /* ---- UNIX Time ---- */
+  function detectUnixUnitFromBigInt(value) {
+    const absValue = value < 0n ? -value : value;
+    if (absValue >= 1000000000000000000n) return 'ns';
+    if (absValue >= 1000000000000000n) return 'us';
+    if (absValue >= 1000000000000n) return 'ms';
+    return 's';
+  }
+
+  function detectUnixUnitFromNumber(value) {
+    const absValue = Math.abs(value);
+    if (absValue >= 1e18) return 'ns';
+    if (absValue >= 1e15) return 'us';
+    if (absValue >= 1e12) return 'ms';
+    return 's';
+  }
+
+  function convertUnixToMs(rawText) {
+    const text = (rawText || '').trim();
+    if (!text) {
+      throw new Error('UNIX Time を入力してください');
+    }
+
+    const integerPattern = /^[+-]?\d+$/;
+    if (integerPattern.test(text)) {
+      const value = BigInt(text);
+      const unit = detectUnixUnitFromBigInt(value);
+      let msBigInt;
+      if (unit === 'ns') msBigInt = value / 1000000n;
+      else if (unit === 'us') msBigInt = value / 1000n;
+      else if (unit === 'ms') msBigInt = value;
+      else msBigInt = value * 1000n;
+
+      const msNumber = Number(msBigInt);
+      if (!Number.isFinite(msNumber)) {
+        throw new Error('値が大きすぎて日時へ変換できません');
+      }
+      return { unit, milliseconds: msNumber };
+    }
+
+    const value = Number(text);
+    if (!Number.isFinite(value)) {
+      throw new Error('数値として解釈できません');
+    }
+    const unit = detectUnixUnitFromNumber(value);
+    let milliseconds;
+    if (unit === 'ns') milliseconds = value / 1e6;
+    else if (unit === 'us') milliseconds = value / 1e3;
+    else if (unit === 'ms') milliseconds = value;
+    else milliseconds = value * 1000;
+
+    return { unit, milliseconds };
+  }
+
+  function formatUnixUnitLabel(unit) {
+    if (unit === 's') return '秒 (s)';
+    if (unit === 'ms') return 'ミリ秒 (ms)';
+    if (unit === 'us') return 'マイクロ秒 (us)';
+    return 'ナノ秒 (ns)';
+  }
+
+  function convertUnixTime(silent = false) {
+    const inputEl = document.getElementById('unix-time');
+    try {
+      const converted = convertUnixToMs(inputEl.value);
+      const date = new Date(converted.milliseconds);
+      if (Number.isNaN(date.getTime())) {
+        throw new Error('日時の範囲外です');
+      }
+
+      const localDate = date.toLocaleString('ja-JP', { hour12: false });
+      const utcDate = date.toISOString();
+
+      showResult(
+        'unix-time-result',
+        `判定単位: <strong>${formatUnixUnitLabel(converted.unit)}</strong><br>` +
+        `Local: <span class="mono">${localDate}</span><br>` +
+        `UTC: <span class="mono">${utcDate}</span><br>` +
+        `Epoch ms: <span class="mono">${fmt(converted.milliseconds, 3)}</span><br>` +
+        `Epoch s: <span class="mono">${fmt(converted.milliseconds / 1000, 6)}</span>`
+      );
+      return true;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      if (!silent) {
+        alert(`変換失敗: ${message}`);
+      }
+      return false;
+    }
+  }
+
+  function installUnixAutoConversion() {
+    const inputEl = document.getElementById('unix-time');
+    inputEl.addEventListener('input', () => convertUnixTime(true));
+    inputEl.addEventListener('paste', () => setTimeout(() => convertUnixTime(true), 0));
+  }
+
+  /* ---- Launch Block Builder ---- */
+  function splitShellLike(text) {
+    const tokens = [];
+    let cur = '';
+    let quote = null;
+    let esc = false;
+
+    for (let i = 0; i < text.length; i += 1) {
+      const ch = text[i];
+
+      if (esc) {
+        cur += ch;
+        esc = false;
+        continue;
+      }
+      if (ch === '\\') {
+        esc = true;
+        continue;
+      }
+      if (quote) {
+        if (ch === quote) {
+          quote = null;
+        } else {
+          cur += ch;
+        }
+        continue;
+      }
+      if (ch === '"' || ch === "'") {
+        quote = ch;
+        continue;
+      }
+      if (/\s/.test(ch)) {
+        if (cur) {
+          tokens.push(cur);
+          cur = '';
+        }
+        continue;
+      }
+      cur += ch;
+    }
+
+    if (cur) tokens.push(cur);
+    return tokens;
+  }
+
+  function escapeSingleQuoted(value) {
+    return String(value).replace(/'/g, "\\'");
+  }
+
+  function parseCliInputs(rawCommand, rawRosParams) {
+    const text = (rawCommand || '').trim();
+    if (!text) {
+      return {
+        command: '',
+        rosParams: (rawRosParams || '').trim(),
+      };
+    }
+
+    const tokens = splitShellLike(text);
+    const commandTokens = [];
+    let rosParams = (rawRosParams || '').trim();
+
+    for (const token of tokens) {
+      if (token.startsWith('ros_params=')) {
+        rosParams = token.split('=', 2)[1].trim();
+        continue;
+      }
+      if (token.startsWith('ros_command=')) {
+        commandTokens.push(token.split('=', 2)[1].trim());
+        continue;
+      }
+      commandTokens.push(token);
+    }
+
+    return {
+      command: commandTokens.join(' ').trim(),
+      rosParams,
+    };
+  }
+
+  function splitMapping(mapping, kind) {
+    if (!mapping.includes(':=')) {
+      throw new Error(`Invalid ${kind}: \"${mapping}\" (expected key:=value)`);
+    }
+    const idx = mapping.indexOf(':=');
+    const key = mapping.slice(0, idx);
+    const value = mapping.slice(idx + 2);
+    if (!key) {
+      throw new Error(`Invalid ${kind}: \"${mapping}\" (empty key)`);
+    }
+    return [key, value];
+  }
+
+  function parseLaunchArguments(tokens) {
+    const args = [];
+    for (const token of tokens) {
+      if (!token.includes(':=')) continue;
+      const idx = token.indexOf(':=');
+      const key = token.slice(0, idx);
+      const value = token.slice(idx + 2);
+      if (key) args.push([key, value]);
+    }
+    return args;
+  }
+
+  function buildRunBlock(tokens) {
+    if (tokens.length < 4) {
+      throw new Error('ros2 run requires: ros2 run <package> <executable>');
+    }
+
+    const pkg = tokens[2];
+    const executable = tokens[3];
+    const name = executable;
+
+    const argumentsList = [];
+    const remappings = [];
+    const parameters = [];
+    let namespace = null;
+    let paramsFile = null;
+
+    let idx = 4;
+    let inRosArgs = false;
+    while (idx < tokens.length) {
+      const token = tokens[idx];
+      if (token === '--ros-args') {
+        inRosArgs = true;
+        idx += 1;
+        continue;
+      }
+      if (token === '--') {
+        inRosArgs = false;
+        idx += 1;
+        continue;
+      }
+      if (!inRosArgs) {
+        argumentsList.push(token);
+        idx += 1;
+        continue;
+      }
+      if ((token === '-r' || token === '--remap') && idx + 1 < tokens.length) {
+        remappings.push(splitMapping(tokens[idx + 1], 'remap'));
+        idx += 2;
+        continue;
+      }
+      if ((token === '-p' || token === '--param') && idx + 1 < tokens.length) {
+        parameters.push(splitMapping(tokens[idx + 1], 'param'));
+        idx += 2;
+        continue;
+      }
+      if (token === '--params-file' && idx + 1 < tokens.length) {
+        paramsFile = tokens[idx + 1];
+        idx += 2;
+        continue;
+      }
+      if ((token === '-ns' || token === '--namespace') && idx + 1 < tokens.length) {
+        namespace = tokens[idx + 1];
+        idx += 2;
+        continue;
+      }
+      idx += 1;
+    }
+
+    const lines = [
+      'Node(',
+      `    package='${escapeSingleQuoted(pkg)}',`,
+      `    executable='${escapeSingleQuoted(executable)}',`,
+      `    name='${escapeSingleQuoted(name)}',`,
+      "    output='screen',",
+    ];
+
+    if (namespace) {
+      lines.push(`    namespace='${escapeSingleQuoted(namespace)}',`);
+    }
+
+    if (argumentsList.length > 0) {
+      const argsStr = argumentsList
+        .map((arg) => `'${escapeSingleQuoted(arg)}'`)
+        .join(', ');
+      lines.push(`    arguments=[${argsStr}],`);
+    }
+
+    if (remappings.length > 0) {
+      lines.push('    remappings=[');
+      for (const [src, dst] of remappings) {
+        lines.push(`        ('${escapeSingleQuoted(src)}', '${escapeSingleQuoted(dst)}'),`);
+      }
+      lines.push('    ],');
+    }
+
+    if (paramsFile || parameters.length > 0) {
+      lines.push('    parameters=[');
+      if (paramsFile) {
+        lines.push(`        '${escapeSingleQuoted(paramsFile)}',`);
+      }
+      if (parameters.length > 0) {
+        lines.push('        {');
+        for (const [key, value] of parameters) {
+          lines.push(`            '${escapeSingleQuoted(key)}': '${escapeSingleQuoted(value)}',`);
+        }
+        lines.push('        },');
+      }
+      lines.push('    ],');
+    }
+
+    lines.push(')');
+    return lines.join('\n');
+  }
+
+  function buildLaunchBlock(tokens) {
+    if (tokens.length < 4) {
+      throw new Error('ros2 launch requires: ros2 launch <package> <launch_file>');
+    }
+
+    const pkg = tokens[2];
+    const launchFile = tokens[3];
+    const launchArgs = parseLaunchArguments(tokens.slice(4));
+
+    const lines = [
+      'IncludeLaunchDescription(',
+      '    PythonLaunchDescriptionSource(',
+      `        [FindPackageShare('${escapeSingleQuoted(pkg)}'), '/launch/${escapeSingleQuoted(launchFile)}']`,
+      '    ),',
+    ];
+
+    if (launchArgs.length > 0) {
+      lines.push('    launch_arguments={');
+      for (const [key, value] of launchArgs) {
+        lines.push(`        '${escapeSingleQuoted(key)}': '${escapeSingleQuoted(value)}',`);
+      }
+      lines.push('    }.items(),');
+    }
+
+    lines.push(')');
+    return lines.join('\n');
+  }
+
+  function commandToLaunchBlock(command) {
+    const tokens = splitShellLike(command);
+    if (tokens.length < 4) {
+      throw new Error('Command is too short. Expected: ros2 run ... or ros2 launch ...');
+    }
+    if (tokens[0] !== 'ros2') {
+      throw new Error('Command must start with "ros2".');
+    }
+
+    const verb = tokens[1];
+    if (verb === 'run') return buildRunBlock(tokens);
+    if (verb === 'launch') return buildLaunchBlock(tokens);
+    throw new Error(`Unsupported command verb: \"${verb}\". Use \"run\" or \"launch\".`);
+  }
+
+  function paramsToLaunchBlock(rosParams) {
+    const names = rosParams
+      .split(',')
+      .map((name) => name.trim())
+      .filter((name) => name);
+
+    if (names.length === 0) {
+      throw new Error('ros_params is empty. Expected: param1,param2');
+    }
+
+    const lines = ['# Launch arguments'];
+    for (const name of names) {
+      lines.push(
+        'DeclareLaunchArgument(',
+        `    '${escapeSingleQuoted(name)}',`,
+        "    default_value='',",
+        `    description='Launch parameter for ${escapeSingleQuoted(name)}',`,
+        '),'
+      );
+    }
+
+    lines.push('', '# Node parameters', 'parameters=[', '    {');
+    for (const name of names) {
+      lines.push(`        '${escapeSingleQuoted(name)}': LaunchConfiguration('${escapeSingleQuoted(name)}'),`);
+    }
+    lines.push('    },', '],');
+
+    return lines.join('\n');
+  }
+
+  function buildOutput(command, rosParams) {
+    const blocks = [];
+    if (command) blocks.push(commandToLaunchBlock(command));
+    if (rosParams) blocks.push(paramsToLaunchBlock(rosParams));
+
+    if (blocks.length === 0) {
+      throw new Error(
+        'Command or ros_params is required. Use command input and/or parameters input.'
+      );
+    }
+    return blocks.join('\n\n');
+  }
+
+  function showLaunchBuilderResult(message, isError) {
+    const resultEl = document.getElementById('launch-builder-result');
+    resultEl.textContent = message;
+    resultEl.style.background = isError ? '#ffecee' : '#f4f8fc';
+    resultEl.style.borderColor = isError ? '#f3b6bf' : '#d8e3ef';
+    resultEl.classList.add('visible');
+  }
+
+  function buildLaunchBlocks(silent = false) {
+    const rawCommand = document.getElementById('ros-command').value;
+    const rawRosParams = document.getElementById('ros-params').value;
+    const codeEl = document.getElementById('launch-builder-code');
+
+    try {
+      const parsed = parseCliInputs(rawCommand, rawRosParams);
+      const output = buildOutput(parsed.command, parsed.rosParams);
+      codeEl.textContent = output;
+      showLaunchBuilderResult('生成成功: launch.py 用ブロックを作成しました。', false);
+      return true;
+    } catch (err) {
+      codeEl.textContent = '# ここに launch.py 用ブロックを表示します';
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      showLaunchBuilderResult(`生成失敗: ${message}`, true);
+      if (!silent) {
+        alert(`生成失敗: ${message}`);
+      }
+      return false;
+    }
+  }
+
+  function installBuilderAutoGeneration() {
+    const cmd = document.getElementById('ros-command');
+    const params = document.getElementById('ros-params');
+
+    const auto = () => buildLaunchBlocks(true);
+
+    cmd.addEventListener('input', auto);
+    params.addEventListener('input', auto);
+
+    cmd.addEventListener('paste', () => setTimeout(auto, 0));
+    params.addEventListener('paste', () => setTimeout(auto, 0));
+  }
+
+  installAutoConversion();
+  installUnixAutoConversion();
+  installBuilderAutoGeneration();
 </script>
 </body>
 </html>
