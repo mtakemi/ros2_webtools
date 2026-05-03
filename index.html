@@ -2,7 +2,6 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ROS2 Web Tools</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,28 +11,43 @@
       background: #f0f2f5;
       color: #222;
       min-height: 100vh;
-      padding: 24px 16px;
+      padding: 16px 20px;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 32px;
-      font-size: 1.8rem;
+      margin-bottom: 16px;
+      font-size: 1.6rem;
       color: #1a73e8;
+    }
+
+    /* ---- PC-first two-column layout ---- */
+    .main-grid {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
     }
 
     .card {
       background: #fff;
       border-radius: 12px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-      padding: 28px 32px;
-      max-width: 640px;
-      margin: 0 auto 32px auto;
+      padding: 20px 24px;
+    }
+
+    /* Rad/Deg card: fixed narrow width */
+    .card-rad-deg {
+      flex: 0 0 270px;
+    }
+
+    /* RPY/Quat card: takes remaining space */
+    .card-rpy-quat {
+      flex: 1;
     }
 
     .card h2 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
+      font-size: 1.1rem;
+      margin-bottom: 14px;
       color: #1a73e8;
       border-left: 4px solid #1a73e8;
       padding-left: 10px;
@@ -42,24 +56,23 @@
     .row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
     label {
-      min-width: 100px;
+      min-width: 82px;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
     }
 
-    input[type="number"], input[type="text"] {
+    input[type="number"] {
       flex: 1;
-      min-width: 120px;
-      padding: 8px 12px;
+      min-width: 80px;
+      padding: 7px 10px;
       border: 1px solid #ccd0d5;
       border-radius: 8px;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       transition: border-color 0.2s;
     }
 
@@ -68,20 +81,52 @@
       border-color: #1a73e8;
     }
 
+    /* ---- Input group highlight (active = conversion source) ---- */
+    .input-group {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 6px;
+    }
+
+    .input-group.active {
+      border-color: #1a73e8;
+      background: #f0f6ff;
+    }
+
+    .input-group-title {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    /* RPY and Quaternion columns side by side */
+    .rpy-quat-columns {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .rpy-quat-columns .input-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    /* ---- Button row ---- */
     .btn-row {
       display: flex;
+      align-items: center;
       gap: 12px;
       margin-top: 8px;
-      flex-wrap: wrap;
     }
 
     button {
-      flex: 1;
-      min-width: 140px;
-      padding: 10px 16px;
+      padding: 9px 20px;
       border: none;
       border-radius: 8px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s, transform 0.1s;
@@ -89,110 +134,118 @@
 
     button:active { transform: scale(0.97); }
 
-    .btn-primary   { background: #1a73e8; color: #fff; }
+    .btn-primary { background: #1a73e8; color: #fff; }
     .btn-primary:hover { background: #1558b0; }
-    .btn-secondary { background: #e8f0fe; color: #1a73e8; }
-    .btn-secondary:hover { background: #c5d8fc; }
 
+    /* Small hint showing current conversion direction */
+    .direction-hint {
+      font-size: 0.8rem;
+      color: #888;
+      margin-left: 4px;
+    }
+
+    /* ---- Result box ---- */
     .result-box {
-      margin-top: 16px;
-      padding: 14px 16px;
+      margin-top: 12px;
+      padding: 12px 14px;
       background: #f8f9fa;
       border-radius: 8px;
-      font-size: 0.95rem;
-      line-height: 1.8;
+      font-size: 0.88rem;
+      line-height: 1.75;
       display: none;
     }
 
     .result-box.visible { display: block; }
-
     .result-box strong { color: #1a73e8; }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #e8eaed;
-      margin: 20px 0;
-    }
-
-    @media (max-width: 480px) {
-      .card { padding: 20px 16px; }
-      label { min-width: 80px; }
-    }
   </style>
 </head>
 <body>
 
 <h1>ROS2 Web Tools</h1>
 
-<!-- ===== Radians / Degrees ===== -->
-<div class="card">
-  <h2>Radians ↔ Degrees 変換</h2>
+<div class="main-grid">
 
-  <div class="row">
-    <label for="rad">Radians</label>
-    <input type="number" id="rad" placeholder="例: 3.14159" step="any" />
-  </div>
+  <!-- ===== Radians / Degrees ===== -->
+  <div class="card card-rad-deg">
+    <h2>Radians ↔ Degrees 変換</h2>
 
-  <div class="row">
-    <label for="deg">Degrees</label>
-    <input type="number" id="deg" placeholder="例: 180" step="any" />
-  </div>
+    <div class="input-group" id="rad-group">
+      <div class="row">
+        <label for="rad">Radians</label>
+        <input type="number" id="rad" placeholder="例: 3.14159" step="any" />
+      </div>
+    </div>
 
-  <div class="btn-row">
-    <button class="btn-primary"   onclick="radToDeg()">Rad → Deg</button>
-    <button class="btn-secondary" onclick="degToRad()">Deg → Rad</button>
-  </div>
+    <div class="input-group" id="deg-group">
+      <div class="row">
+        <label for="deg">Degrees</label>
+        <input type="number" id="deg" placeholder="例: 180" step="any" />
+      </div>
+    </div>
 
-  <div class="result-box" id="rad-deg-result"></div>
-</div>
+    <div class="btn-row">
+      <button class="btn-primary" id="rad-deg-btn" onclick="convertRadDeg()">変換</button>
+      <span class="direction-hint" id="rad-deg-hint"></span>
+    </div>
 
-<!-- ===== RPY / Quaternion ===== -->
-<div class="card">
-  <h2>RPY ↔ Quaternion 変換</h2>
-
-  <!-- RPY inputs -->
-  <p style="font-weight:600; margin-bottom:10px;">RPY (Radians)</p>
-  <div class="row">
-    <label for="roll">Roll (X)</label>
-    <input type="number" id="roll" placeholder="例: 0.0" step="any" />
-  </div>
-  <div class="row">
-    <label for="pitch">Pitch (Y)</label>
-    <input type="number" id="pitch" placeholder="例: 0.0" step="any" />
-  </div>
-  <div class="row">
-    <label for="yaw">Yaw (Z)</label>
-    <input type="number" id="yaw" placeholder="例: 1.5708" step="any" />
+    <div class="result-box" id="rad-deg-result"></div>
   </div>
 
-  <hr class="divider" />
+  <!-- ===== RPY / Quaternion ===== -->
+  <div class="card card-rpy-quat">
+    <h2>RPY ↔ Quaternion 変換</h2>
 
-  <!-- Quaternion inputs -->
-  <p style="font-weight:600; margin-bottom:10px;">Quaternion (x, y, z, w)</p>
-  <div class="row">
-    <label for="qx">x</label>
-    <input type="number" id="qx" placeholder="例: 0.0" step="any" />
-  </div>
-  <div class="row">
-    <label for="qy">y</label>
-    <input type="number" id="qy" placeholder="例: 0.0" step="any" />
-  </div>
-  <div class="row">
-    <label for="qz">z</label>
-    <input type="number" id="qz" placeholder="例: 0.7071" step="any" />
-  </div>
-  <div class="row">
-    <label for="qw">w</label>
-    <input type="number" id="qw" placeholder="例: 0.7071" step="any" />
+    <div class="rpy-quat-columns">
+
+      <!-- RPY inputs -->
+      <div class="input-group" id="rpy-group">
+        <div class="input-group-title">RPY (Radians)</div>
+        <div class="row">
+          <label for="roll">Roll (X)</label>
+          <input type="number" id="roll" placeholder="0.0" step="any" />
+        </div>
+        <div class="row">
+          <label for="pitch">Pitch (Y)</label>
+          <input type="number" id="pitch" placeholder="0.0" step="any" />
+        </div>
+        <div class="row">
+          <label for="yaw">Yaw (Z)</label>
+          <input type="number" id="yaw" placeholder="1.5708" step="any" />
+        </div>
+      </div>
+
+      <!-- Quaternion inputs -->
+      <div class="input-group" id="quat-group">
+        <div class="input-group-title">Quaternion (x, y, z, w)</div>
+        <div class="row">
+          <label for="qx">x</label>
+          <input type="number" id="qx" placeholder="0.0" step="any" />
+        </div>
+        <div class="row">
+          <label for="qy">y</label>
+          <input type="number" id="qy" placeholder="0.0" step="any" />
+        </div>
+        <div class="row">
+          <label for="qz">z</label>
+          <input type="number" id="qz" placeholder="0.7071" step="any" />
+        </div>
+        <div class="row">
+          <label for="qw">w</label>
+          <input type="number" id="qw" placeholder="0.7071" step="any" />
+        </div>
+      </div>
+
+    </div><!-- .rpy-quat-columns -->
+
+    <div class="btn-row">
+      <button class="btn-primary" id="rpy-quat-btn" onclick="convertRpyQuat()">変換</button>
+      <span class="direction-hint" id="rpy-quat-hint"></span>
+    </div>
+
+    <div class="result-box" id="rpy-quat-result"></div>
   </div>
 
-  <div class="btn-row">
-    <button class="btn-primary"   onclick="rpyToQuat()">RPY → Quaternion</button>
-    <button class="btn-secondary" onclick="quatToRpy()">Quaternion → RPY</button>
-  </div>
-
-  <div class="result-box" id="rpy-quat-result"></div>
-</div>
+</div><!-- .main-grid -->
 
 <script>
   /* ---- helpers ---- */
@@ -209,33 +262,121 @@
     el.classList.add('visible');
   }
 
-  /* ---- Rad / Deg ---- */
-  function radToDeg() {
+  /* ---- last-edit tracking ---- */
+  let lastRadDegEdit  = null;  // 'rad' | 'deg'
+  let lastRpyQuatEdit = null;  // 'rpy' | 'quat'
+
+  function setRadDegActive(which) {
+    document.getElementById('rad-group').classList.toggle('active', which === 'rad');
+    document.getElementById('deg-group').classList.toggle('active', which === 'deg');
+    const hints = { rad: 'Rad → Deg', deg: 'Deg → Rad' };
+    document.getElementById('rad-deg-hint').textContent = hints[which] || '';
+  }
+
+  function setRpyQuatActive(which) {
+    document.getElementById('rpy-group').classList.toggle('active', which === 'rpy');
+    document.getElementById('quat-group').classList.toggle('active', which === 'quat');
+    const hints = { rpy: 'RPY → Quaternion', quat: 'Quaternion → RPY' };
+    document.getElementById('rpy-quat-hint').textContent = hints[which] || '';
+  }
+
+  /* ---- Event listener helpers ---- */
+
+  /**
+   * Binds input + paste tracking to a single field in the Rad/Deg card.
+   * On paste, auto-converts if the field value is a valid number.
+   */
+  function bindRadDegField(id, groupKey, autoConvertFn) {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      lastRadDegEdit = groupKey;
+      setRadDegActive(groupKey);
+    });
+    el.addEventListener('paste', () => {
+      setTimeout(() => {
+        lastRadDegEdit = groupKey;
+        setRadDegActive(groupKey);
+        if (!isNaN(parseFloat(document.getElementById(id).value))) autoConvertFn();
+      }, 0);
+    });
+  }
+
+  /**
+   * Binds input + paste tracking to a group of fields in the RPY/Quat card.
+   * On paste, auto-converts if every field in requiredIds has a valid number.
+   */
+  function bindRpyQuatGroup(ids, groupKey, requiredIds, autoConvertFn) {
+    ids.forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        lastRpyQuatEdit = groupKey;
+        setRpyQuatActive(groupKey);
+      });
+      document.getElementById(id).addEventListener('paste', () => {
+        setTimeout(() => {
+          lastRpyQuatEdit = groupKey;
+          setRpyQuatActive(groupKey);
+          if (requiredIds.every(i => !isNaN(parseFloat(document.getElementById(i).value)))) {
+            autoConvertFn();
+          }
+        }, 0);
+      });
+    });
+  }
+
+  /* ---- Event listeners: track last edited + auto-convert on paste ---- */
+
+  bindRadDegField('rad', 'rad', () => doRadToDeg());
+  bindRadDegField('deg', 'deg', () => doDegToRad());
+
+  bindRpyQuatGroup(['roll', 'pitch', 'yaw'], 'rpy',  ['roll', 'pitch', 'yaw'],        () => doRpyToQuat());
+  bindRpyQuatGroup(['qx', 'qy', 'qz', 'qw'], 'quat', ['qx', 'qy', 'qz', 'qw'], () => doQuatToRpy());
+
+  /* ---- Rad / Deg conversions ---- */
+  function doRadToDeg() {
     const rad = parseFloat(document.getElementById('rad').value);
-    if (isNaN(rad)) { alert('Radians の値を入力してください'); return; }
+    if (isNaN(rad)) return;
     const deg = rad * (180 / Math.PI);
     document.getElementById('deg').value = fmt(deg);
     showResult('rad-deg-result',
       `<strong>${fmt(rad)} rad</strong> = <strong>${fmt(deg)} °</strong>`);
   }
 
-  function degToRad() {
+  function doDegToRad() {
     const deg = parseFloat(document.getElementById('deg').value);
-    if (isNaN(deg)) { alert('Degrees の値を入力してください'); return; }
+    if (isNaN(deg)) return;
     const rad = deg * (Math.PI / 180);
     document.getElementById('rad').value = fmt(rad);
     showResult('rad-deg-result',
       `<strong>${fmt(deg)} °</strong> = <strong>${fmt(rad)} rad</strong>`);
   }
 
+  /** Single convert button handler — uses last-edited field as source. */
+  function convertRadDeg() {
+    let source = lastRadDegEdit;
+    if (!source) {
+      if (!isNaN(parseFloat(document.getElementById('rad').value))) source = 'rad';
+      else if (!isNaN(parseFloat(document.getElementById('deg').value))) source = 'deg';
+    }
+    if (!source) { alert('値を入力してください'); return; }
+    if (source === 'rad') {
+      if (isNaN(parseFloat(document.getElementById('rad').value))) {
+        alert('Radians の値を入力してください'); return;
+      }
+      doRadToDeg();
+    } else {
+      if (isNaN(parseFloat(document.getElementById('deg').value))) {
+        alert('Degrees の値を入力してください'); return;
+      }
+      doDegToRad();
+    }
+  }
+
   /* ---- RPY → Quaternion (ZYX / extrinsic XYZ) ---- */
-  function rpyToQuat() {
+  function doRpyToQuat() {
     const roll  = parseFloat(document.getElementById('roll').value);
     const pitch = parseFloat(document.getElementById('pitch').value);
     const yaw   = parseFloat(document.getElementById('yaw').value);
-    if ([roll, pitch, yaw].some(isNaN)) {
-      alert('Roll, Pitch, Yaw の値をすべて入力してください'); return;
-    }
+    if ([roll, pitch, yaw].some(isNaN)) return;
 
     const cr = Math.cos(roll  / 2), sr = Math.sin(roll  / 2);
     const cp = Math.cos(pitch / 2), sp = Math.sin(pitch / 2);
@@ -261,14 +402,12 @@
   }
 
   /* ---- Quaternion → RPY ---- */
-  function quatToRpy() {
+  function doQuatToRpy() {
     const qx = parseFloat(document.getElementById('qx').value);
     const qy = parseFloat(document.getElementById('qy').value);
     const qz = parseFloat(document.getElementById('qz').value);
     const qw = parseFloat(document.getElementById('qw').value);
-    if ([qx, qy, qz, qw].some(isNaN)) {
-      alert('x, y, z, w の値をすべて入力してください'); return;
-    }
+    if ([qx, qy, qz, qw].some(isNaN)) return;
 
     // Normalize
     const norm = Math.sqrt(qx*qx + qy*qy + qz*qz + qw*qw);
@@ -305,6 +444,28 @@
       `&nbsp;&nbsp;<strong>Roll  (X)</strong> = ${fmt(roll  * 180/Math.PI)} °<br>` +
       `&nbsp;&nbsp;<strong>Pitch (Y)</strong> = ${fmt(pitch * 180/Math.PI)} °<br>` +
       `&nbsp;&nbsp;<strong>Yaw   (Z)</strong> = ${fmt(yaw   * 180/Math.PI)} °`);
+  }
+
+  /** Single convert button handler — uses last-edited group as source. */
+  function convertRpyQuat() {
+    const rpyFull  = ['roll', 'pitch', 'yaw'].every(i => !isNaN(parseFloat(document.getElementById(i).value)));
+    const quatFull = ['qx', 'qy', 'qz', 'qw'].every(i => !isNaN(parseFloat(document.getElementById(i).value)));
+
+    let source = lastRpyQuatEdit;
+    if (!source) {
+      if (rpyFull) source = 'rpy';
+      else if (quatFull) source = 'quat';
+    }
+
+    if (!source) { alert('値を入力してください'); return; }
+
+    if (source === 'rpy') {
+      if (!rpyFull) { alert('Roll, Pitch, Yaw の値をすべて入力してください'); return; }
+      doRpyToQuat();
+    } else {
+      if (!quatFull) { alert('x, y, z, w の値をすべて入力してください'); return; }
+      doQuatToRpy();
+    }
   }
 </script>
 </body>
