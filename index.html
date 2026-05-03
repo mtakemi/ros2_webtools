@@ -202,15 +202,15 @@
         <div class="input-group-title">RPY (Radians)</div>
         <div class="row">
           <label for="roll">Roll (X)</label>
-          <input type="number" id="roll" placeholder="0.0" step="any" />
+          <input type="number" id="roll" placeholder="例: 0.0" step="any" />
         </div>
         <div class="row">
           <label for="pitch">Pitch (Y)</label>
-          <input type="number" id="pitch" placeholder="0.0" step="any" />
+          <input type="number" id="pitch" placeholder="例: 0.0" step="any" />
         </div>
         <div class="row">
           <label for="yaw">Yaw (Z)</label>
-          <input type="number" id="yaw" placeholder="1.5708" step="any" />
+          <input type="number" id="yaw" placeholder="例: 1.5708" step="any" />
         </div>
       </div>
 
@@ -219,19 +219,19 @@
         <div class="input-group-title">Quaternion (x, y, z, w)</div>
         <div class="row">
           <label for="qx">x</label>
-          <input type="number" id="qx" placeholder="0.0" step="any" />
+          <input type="number" id="qx" placeholder="例: 0.0" step="any" />
         </div>
         <div class="row">
           <label for="qy">y</label>
-          <input type="number" id="qy" placeholder="0.0" step="any" />
+          <input type="number" id="qy" placeholder="例: 0.0" step="any" />
         </div>
         <div class="row">
           <label for="qz">z</label>
-          <input type="number" id="qz" placeholder="0.7071" step="any" />
+          <input type="number" id="qz" placeholder="例: 0.7071" step="any" />
         </div>
         <div class="row">
           <label for="qw">w</label>
-          <input type="number" id="qw" placeholder="0.7071" step="any" />
+          <input type="number" id="qw" placeholder="例: 0.7071" step="any" />
         </div>
       </div>
 
@@ -282,20 +282,28 @@
 
   /* ---- Event listener helpers ---- */
 
+  /** Marks which Rad/Deg field is the current conversion source. */
+  function activateRadDeg(groupKey) {
+    lastRadDegEdit = groupKey;
+    setRadDegActive(groupKey);
+  }
+
+  /** Marks which RPY/Quat group is the current conversion source. */
+  function activateRpyQuat(groupKey) {
+    lastRpyQuatEdit = groupKey;
+    setRpyQuatActive(groupKey);
+  }
+
   /**
    * Binds input + paste tracking to a single field in the Rad/Deg card.
    * On paste, auto-converts if the field value is a valid number.
    */
   function bindRadDegField(id, groupKey, autoConvertFn) {
     const el = document.getElementById(id);
-    el.addEventListener('input', () => {
-      lastRadDegEdit = groupKey;
-      setRadDegActive(groupKey);
-    });
+    el.addEventListener('input', () => activateRadDeg(groupKey));
     el.addEventListener('paste', () => {
       setTimeout(() => {
-        lastRadDegEdit = groupKey;
-        setRadDegActive(groupKey);
+        activateRadDeg(groupKey);
         if (!isNaN(parseFloat(document.getElementById(id).value))) autoConvertFn();
       }, 0);
     });
@@ -307,20 +315,32 @@
    */
   function bindRpyQuatGroup(ids, groupKey, requiredIds, autoConvertFn) {
     ids.forEach(id => {
-      document.getElementById(id).addEventListener('input', () => {
-        lastRpyQuatEdit = groupKey;
-        setRpyQuatActive(groupKey);
-      });
+      document.getElementById(id).addEventListener('input', () => activateRpyQuat(groupKey));
       document.getElementById(id).addEventListener('paste', () => {
         setTimeout(() => {
-          lastRpyQuatEdit = groupKey;
-          setRpyQuatActive(groupKey);
+          activateRpyQuat(groupKey);
           if (requiredIds.every(i => !isNaN(parseFloat(document.getElementById(i).value)))) {
             autoConvertFn();
           }
         }, 0);
       });
     });
+  }
+
+  /** Returns the effective source for Rad/Deg conversion (last edited, or inferred from filled fields). */
+  function resolveRadDegSource() {
+    if (lastRadDegEdit) return lastRadDegEdit;
+    if (!isNaN(parseFloat(document.getElementById('rad').value))) return 'rad';
+    if (!isNaN(parseFloat(document.getElementById('deg').value))) return 'deg';
+    return null;
+  }
+
+  /** Returns the effective source for RPY/Quat conversion (last edited, or inferred from filled groups). */
+  function resolveRpyQuatSource(rpyFull, quatFull) {
+    if (lastRpyQuatEdit) return lastRpyQuatEdit;
+    if (rpyFull) return 'rpy';
+    if (quatFull) return 'quat';
+    return null;
   }
 
   /* ---- Event listeners: track last edited + auto-convert on paste ---- */
@@ -352,11 +372,7 @@
 
   /** Single convert button handler — uses last-edited field as source. */
   function convertRadDeg() {
-    let source = lastRadDegEdit;
-    if (!source) {
-      if (!isNaN(parseFloat(document.getElementById('rad').value))) source = 'rad';
-      else if (!isNaN(parseFloat(document.getElementById('deg').value))) source = 'deg';
-    }
+    const source = resolveRadDegSource();
     if (!source) { alert('値を入力してください'); return; }
     if (source === 'rad') {
       if (isNaN(parseFloat(document.getElementById('rad').value))) {
@@ -450,12 +466,7 @@
   function convertRpyQuat() {
     const rpyFull  = ['roll', 'pitch', 'yaw'].every(i => !isNaN(parseFloat(document.getElementById(i).value)));
     const quatFull = ['qx', 'qy', 'qz', 'qw'].every(i => !isNaN(parseFloat(document.getElementById(i).value)));
-
-    let source = lastRpyQuatEdit;
-    if (!source) {
-      if (rpyFull) source = 'rpy';
-      else if (quatFull) source = 'quat';
-    }
+    const source = resolveRpyQuatSource(rpyFull, quatFull);
 
     if (!source) { alert('値を入力してください'); return; }
 
